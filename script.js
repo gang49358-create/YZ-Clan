@@ -1,270 +1,12 @@
-/* =========================================
-   YZ CLAN — MAIN JAVASCRIPT
-   ========================================= */
-
-
-/* MOBILE MENU */
-
-const menuButton = document.getElementById("menuButton");
-const mobileMenu = document.getElementById("mobileMenu");
-
-menuButton.addEventListener("click", () => {
-    mobileMenu.classList.toggle("active");
-});
-
-
-document.querySelectorAll(".mobile-menu a").forEach(link => {
-
-    link.addEventListener("click", () => {
-        mobileMenu.classList.remove("active");
-    });
-
-});
-
-
-/* =========================================
-   FAQ ACCORDION
-   ========================================= */
-
-const faqItems = document.querySelectorAll(".faq-item");
-
-faqItems.forEach(item => {
-
-    const question = item.querySelector(".faq-question");
-    const answer = item.querySelector(".faq-answer");
-
-    question.addEventListener("click", () => {
-
-        const isActive = item.classList.contains("active");
-
-        // Close all
-        faqItems.forEach(otherItem => {
-
-            otherItem.classList.remove("active");
-
-            const otherAnswer =
-                otherItem.querySelector(".faq-answer");
-
-            otherAnswer.style.maxHeight = null;
-
-        });
-
-
-        // Open selected
-        if (!isActive) {
-
-            item.classList.add("active");
-
-            answer.style.maxHeight =
-                answer.scrollHeight + "px";
-
-        }
-
-    });
-
-});
-
-
-/* =========================================
-   JOIN FORM
-   ========================================= */
-
-const joinForm = document.getElementById("joinForm");
-const successMessage =
-    document.getElementById("successMessage");
-
-const resetForm =
-    document.getElementById("resetForm");
-
-
-joinForm.addEventListener("submit", (event) => {
-
-    event.preventDefault();
-
-
-    const level =
-        Number(document.getElementById("level").value);
-
-
-    /*
-       CHECK MINIMUM LEVEL
-    */
-
-    if (level < 65) {
-
-        alert(
-            "Для вступления в YZ необходим 65+ уровень."
-        );
-
-        return;
-
-    }
-
-
-    /*
-       GET FORM DATA
-
-       Здесь можно подключить отправку
-       заявки в Discord / Telegram / Formspree
-       или собственный сервер.
-    */
-
-    const formData = {
-
-        nickname:
-            document.getElementById("nickname").value,
-
-        level:
-            level,
-
-        hours:
-            document.getElementById("hours").value,
-
-        experience:
-            document.getElementById("experience").value,
-
-        contact:
-            document.getElementById("contact").value,
-
-        about:
-            document.getElementById("about-player").value
-
-    };
-
-
-    console.log(
-        "Новая заявка YZ:",
-        formData
-    );
-
-
-    /*
-       HIDE FORM
-    */
-
-    joinForm.style.display = "none";
-
-
-    /*
-       SHOW SUCCESS
-    */
-
-    successMessage.classList.add("active");
-
-
-    /*
-       SCROLL TO MESSAGE
-    */
-
-    successMessage.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-    });
-
-});
-
-
-/* =========================================
-   RESET FORM
-   ========================================= */
-
-resetForm.addEventListener("click", () => {
-
-    joinForm.reset();
-
-    successMessage.classList.remove("active");
-
-    joinForm.style.display = "block";
-
-    joinForm.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-    });
-
-});
-
-
-/* =========================================
-   HEADER BACKGROUND
-   ========================================= */
-
-const header = document.querySelector(".header");
-
-window.addEventListener("scroll", () => {
-
-    if (window.scrollY > 50) {
-
-        header.style.background =
-            "rgba(5,5,5,.95)";
-
-    } else {
-
-        header.style.background =
-            "rgba(8,8,8,.78)";
-
-    }
-
-});
-
-
-/* =========================================
-   SMOOTH REVEAL ANIMATION
-   ========================================= */
-
-const revealElements =
-    document.querySelectorAll(
-        ".requirement, .advantage, .rule, .stat"
-    );
-
-
-const observer =
-    new IntersectionObserver(
-        entries => {
-
-            entries.forEach(entry => {
-
-                if (entry.isIntersecting) {
-
-                    entry.target.style.opacity = "1";
-                    entry.target.style.transform =
-                        "translateY(0)";
-
-                    observer.unobserve(
-                        entry.target
-                    );
-
-                }
-
-            });
-
-        },
-        {
-            threshold: 0.1
-        }
-    );
-
-
-revealElements.forEach(element => {
-
-    element.style.opacity = "0";
-
-    element.style.transform =
-        "translateY(25px)";
-
-    element.style.transition =
-        "opacity .6s ease, transform .6s ease";
-
-    observer.observe(element);
-
-});
 /* =========================================================
-   YZ ADMIN SYSTEM
+   YZ CLAN — UNIVERSAL JAVASCRIPT
+   MAIN SITE + ADMIN PANEL
    LOCAL STORAGE VERSION
 ========================================================= */
 
 
 /* =========================================================
-   CONFIG
+   ADMIN CONFIG
 ========================================================= */
 
 const ADMIN_USERNAME = "AkashiSK8";
@@ -352,7 +94,8 @@ const DEFAULT_APPLICATIONS = [
         about:
             "Активный PvP игрок. Ищу серьёзный активный клан.",
         status: "NEW",
-        createdAt: new Date().toLocaleDateString("ru-RU")
+        createdAt:
+            new Date().toLocaleDateString("ru-RU")
     },
 
     {
@@ -367,7 +110,8 @@ const DEFAULT_APPLICATIONS = [
         about:
             "Люблю рейды и командную игру. Готов играть каждый день.",
         status: "REVIEW",
-        createdAt: new Date().toLocaleDateString("ru-RU")
+        createdAt:
+            new Date().toLocaleDateString("ru-RU")
     },
 
     {
@@ -382,10 +126,574 @@ const DEFAULT_APPLICATIONS = [
         about:
             "Адекватный активный игрок.",
         status: "NEW",
-        createdAt: new Date().toLocaleDateString("ru-RU")
+        createdAt:
+            new Date().toLocaleDateString("ru-RU")
     }
 
 ];
+
+
+/* =========================================================
+   MAIN SITE INITIALIZATION
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        initMobileMenu();
+
+        initFAQ();
+
+        initJoinForm();
+
+        initHeader();
+
+        initRevealAnimations();
+
+        initAdminPanel();
+
+    }
+);
+
+
+/* =========================================================
+   MOBILE MENU
+========================================================= */
+
+function initMobileMenu() {
+
+    const menuButton =
+        document.getElementById("menuButton");
+
+    const mobileMenu =
+        document.getElementById("mobileMenu");
+
+
+    /*
+       Если мы на admin.html,
+       этих элементов нет.
+       Просто выходим без ошибки.
+    */
+
+    if (!menuButton || !mobileMenu) {
+        return;
+    }
+
+
+    menuButton.addEventListener(
+        "click",
+        () => {
+
+            mobileMenu.classList.toggle(
+                "active"
+            );
+
+        }
+    );
+
+
+    document
+        .querySelectorAll(
+            ".mobile-menu a"
+        )
+        .forEach(link => {
+
+            link.addEventListener(
+                "click",
+                () => {
+
+                    mobileMenu.classList.remove(
+                        "active"
+                    );
+
+                }
+            );
+
+        });
+
+}
+
+
+/* =========================================================
+   FAQ
+========================================================= */
+
+function initFAQ() {
+
+    const faqItems =
+        document.querySelectorAll(
+            ".faq-item"
+        );
+
+
+    /*
+       На admin.html FAQ нет.
+    */
+
+    if (!faqItems.length) {
+        return;
+    }
+
+
+    faqItems.forEach(item => {
+
+        const question =
+            item.querySelector(
+                ".faq-question"
+            );
+
+        const answer =
+            item.querySelector(
+                ".faq-answer"
+            );
+
+
+        if (!question || !answer) {
+            return;
+        }
+
+
+        question.addEventListener(
+            "click",
+            () => {
+
+                const isActive =
+                    item.classList.contains(
+                        "active"
+                    );
+
+
+                /*
+                   Закрываем все FAQ
+                */
+
+                faqItems.forEach(
+                    otherItem => {
+
+                        otherItem.classList.remove(
+                            "active"
+                        );
+
+
+                        const otherAnswer =
+                            otherItem.querySelector(
+                                ".faq-answer"
+                            );
+
+
+                        if (otherAnswer) {
+
+                            otherAnswer.style.maxHeight =
+                                null;
+
+                        }
+
+                    }
+                );
+
+
+                /*
+                   Открываем выбранный
+                */
+
+                if (!isActive) {
+
+                    item.classList.add(
+                        "active"
+                    );
+
+
+                    answer.style.maxHeight =
+                        answer.scrollHeight +
+                        "px";
+
+                }
+
+            }
+        );
+
+    });
+
+}
+
+
+/* =========================================================
+   JOIN FORM
+========================================================= */
+
+function initJoinForm() {
+
+    const joinForm =
+        document.getElementById(
+            "joinForm"
+        );
+
+
+    /*
+       Если это admin.html,
+       формы вступления нет.
+    */
+
+    if (!joinForm) {
+        return;
+    }
+
+
+    const successMessage =
+        document.getElementById(
+            "successMessage"
+        );
+
+    const resetForm =
+        document.getElementById(
+            "resetForm"
+        );
+
+
+    joinForm.addEventListener(
+        "submit",
+        event => {
+
+            event.preventDefault();
+
+
+            const levelInput =
+                document.getElementById(
+                    "level"
+                );
+
+
+            const level =
+                Number(
+                    levelInput?.value || 0
+                );
+
+
+            /*
+               MINIMUM LEVEL
+            */
+
+            if (level < 65) {
+
+                alert(
+                    "Для вступления в YZ необходим 65+ уровень."
+                );
+
+                return;
+
+            }
+
+
+            /*
+               FORM DATA
+            */
+
+            const formData = {
+
+                id:
+                    "app-" +
+                    Date.now(),
+
+                nickname:
+                    getInputValue(
+                        "nickname"
+                    ),
+
+                level:
+                    level,
+
+                activity:
+                    getInputValue(
+                        "hours"
+                    ),
+
+                hours:
+                    getInputValue(
+                        "hours"
+                    ),
+
+                experience:
+                    getInputValue(
+                        "experience"
+                    ),
+
+                contact:
+                    getInputValue(
+                        "contact"
+                    ),
+
+                discord:
+                    getInputValue(
+                        "contact"
+                    ),
+
+                age:
+                    getInputValue(
+                        "age"
+                    ) || "—",
+
+                role:
+                    getInputValue(
+                        "role"
+                    ) || "COMBATER",
+
+                about:
+                    getInputValue(
+                        "about-player"
+                    ),
+
+                status:
+                    "NEW",
+
+                createdAt:
+                    new Date()
+                        .toLocaleDateString(
+                            "ru-RU"
+                        )
+
+            };
+
+
+            /*
+               SAVE APPLICATION
+            */
+
+            saveNewApplication(
+                formData
+            );
+
+
+            console.log(
+                "Новая заявка YZ:",
+                formData
+            );
+
+
+            /*
+               HIDE FORM
+            */
+
+            joinForm.style.display =
+                "none";
+
+
+            /*
+               SHOW SUCCESS
+            */
+
+            if (successMessage) {
+
+                successMessage.classList.add(
+                    "active"
+                );
+
+
+                successMessage.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+
+            }
+
+        }
+    );
+
+
+    /*
+       RESET
+    */
+
+    if (resetForm) {
+
+        resetForm.addEventListener(
+            "click",
+            () => {
+
+                joinForm.reset();
+
+
+                if (successMessage) {
+
+                    successMessage.classList.remove(
+                        "active"
+                    );
+
+                }
+
+
+                joinForm.style.display =
+                    "block";
+
+
+                joinForm.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+
+            }
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   SAVE NEW APPLICATION
+========================================================= */
+
+function saveNewApplication(
+    application
+) {
+
+    const applications =
+        getApplications();
+
+
+    applications.push(
+        application
+    );
+
+
+    saveApplications(
+        applications
+    );
+
+}
+
+
+/* =========================================================
+   HEADER BACKGROUND
+========================================================= */
+
+function initHeader() {
+
+    const header =
+        document.querySelector(
+            ".header"
+        );
+
+
+    /*
+       На admin.html используется
+       .admin-header.
+    */
+
+    if (!header) {
+        return;
+    }
+
+
+    const updateHeader =
+        () => {
+
+            if (
+                window.scrollY > 50
+            ) {
+
+                header.style.background =
+                    "rgba(5,5,5,.95)";
+
+            } else {
+
+                header.style.background =
+                    "rgba(8,8,8,.78)";
+
+            }
+
+        };
+
+
+    window.addEventListener(
+        "scroll",
+        updateHeader
+    );
+
+
+    updateHeader();
+
+}
+
+
+/* =========================================================
+   REVEAL ANIMATIONS
+========================================================= */
+
+function initRevealAnimations() {
+
+    const revealElements =
+        document.querySelectorAll(
+            ".requirement, .advantage, .rule, .stat"
+        );
+
+
+    if (
+        !revealElements.length ||
+        !("IntersectionObserver" in window)
+    ) {
+        return;
+    }
+
+
+    const observer =
+        new IntersectionObserver(
+            entries => {
+
+                entries.forEach(
+                    entry => {
+
+                        if (
+                            entry.isIntersecting
+                        ) {
+
+                            entry.target.style.opacity =
+                                "1";
+
+
+                            entry.target.style.transform =
+                                "translateY(0)";
+
+
+                            observer.unobserve(
+                                entry.target
+                            );
+
+                        }
+
+                    }
+                );
+
+            },
+            {
+                threshold: 0.1
+            }
+        );
+
+
+    revealElements.forEach(
+        element => {
+
+            element.style.opacity =
+                "0";
+
+
+            element.style.transform =
+                "translateY(25px)";
+
+
+            element.style.transition =
+                "opacity .6s ease, transform .6s ease";
+
+
+            observer.observe(
+                element
+            );
+
+        }
+    );
+
+}
 
 
 /* =========================================================
@@ -399,33 +707,61 @@ function getRoster() {
             STORAGE_KEYS.ROSTER
         );
 
+
     if (!data) {
+
+        const copy =
+            [...DEFAULT_ROSTER];
+
 
         localStorage.setItem(
             STORAGE_KEYS.ROSTER,
-            JSON.stringify(DEFAULT_ROSTER)
+            JSON.stringify(copy)
         );
 
-        return [...DEFAULT_ROSTER];
+
+        return copy;
+
     }
+
 
     try {
 
-        return JSON.parse(data);
+        const parsed =
+            JSON.parse(data);
+
+
+        if (!Array.isArray(parsed)) {
+            throw new Error(
+                "Invalid roster"
+            );
+        }
+
+
+        return parsed;
 
     } catch {
 
+        const copy =
+            [...DEFAULT_ROSTER];
+
+
         localStorage.setItem(
             STORAGE_KEYS.ROSTER,
-            JSON.stringify(DEFAULT_ROSTER)
+            JSON.stringify(copy)
         );
 
-        return [...DEFAULT_ROSTER];
+
+        return copy;
+
     }
+
 }
 
 
-function saveRoster(roster) {
+function saveRoster(
+    roster
+) {
 
     localStorage.setItem(
         STORAGE_KEYS.ROSTER,
@@ -442,39 +778,208 @@ function getApplications() {
             STORAGE_KEYS.APPLICATIONS
         );
 
+
     if (!data) {
+
+        const copy =
+            [...DEFAULT_APPLICATIONS];
+
 
         localStorage.setItem(
             STORAGE_KEYS.APPLICATIONS,
-            JSON.stringify(DEFAULT_APPLICATIONS)
+            JSON.stringify(copy)
         );
 
-        return [...DEFAULT_APPLICATIONS];
+
+        return copy;
+
     }
+
 
     try {
 
-        return JSON.parse(data);
+        const parsed =
+            JSON.parse(data);
+
+
+        if (!Array.isArray(parsed)) {
+            throw new Error(
+                "Invalid applications"
+            );
+        }
+
+
+        return parsed;
 
     } catch {
 
+        const copy =
+            [...DEFAULT_APPLICATIONS];
+
+
         localStorage.setItem(
             STORAGE_KEYS.APPLICATIONS,
-            JSON.stringify(DEFAULT_APPLICATIONS)
+            JSON.stringify(copy)
         );
 
-        return [...DEFAULT_APPLICATIONS];
+
+        return copy;
+
     }
 
 }
 
 
-function saveApplications(applications) {
+function saveApplications(
+    applications
+) {
 
     localStorage.setItem(
         STORAGE_KEYS.APPLICATIONS,
-        JSON.stringify(applications)
+        JSON.stringify(
+            applications
+        )
     );
+
+}
+
+
+/* =========================================================
+   ADMIN INITIALIZATION
+========================================================= */
+
+function initAdminPanel() {
+
+    const loginScreen =
+        document.getElementById(
+            "loginScreen"
+        );
+
+    const adminApp =
+        document.getElementById(
+            "adminApp"
+        );
+
+
+    /*
+       Если это index.html,
+       admin элементов нет.
+    */
+
+    if (
+        !loginScreen ||
+        !adminApp
+    ) {
+
+        return;
+
+    }
+
+
+    const loginForm =
+        document.getElementById(
+            "loginForm"
+        );
+
+
+    const logoutButton =
+        document.getElementById(
+            "logoutButton"
+        );
+
+
+    /*
+       CHECK EXISTING LOGIN
+    */
+
+    const authenticated =
+        localStorage.getItem(
+            STORAGE_KEYS.AUTH
+        ) === "true";
+
+
+    if (authenticated) {
+
+        showAdmin();
+
+    } else {
+
+        showLogin();
+
+    }
+
+
+    /*
+       LOGIN
+    */
+
+    if (loginForm) {
+
+        loginForm.addEventListener(
+            "submit",
+            handleLogin
+        );
+
+    }
+
+
+    /*
+       LOGOUT
+    */
+
+    if (logoutButton) {
+
+        logoutButton.addEventListener(
+            "click",
+            logout
+        );
+
+    }
+
+
+    /*
+       ADMIN NAVIGATION
+    */
+
+    setupNavigation();
+
+
+    /*
+       APPLICATION SEARCH/FILTER
+    */
+
+    setupApplicationControls();
+
+
+    /*
+       PLAYER FORM
+    */
+
+    setupPlayerForm();
+
+
+    /*
+       ADD PLAYER
+    */
+
+    const addPlayerButton =
+        document.getElementById(
+            "addPlayerButton"
+        );
+
+
+    if (addPlayerButton) {
+
+        addPlayerButton.addEventListener(
+            "click",
+            () => {
+
+                openPlayerModal();
+
+            }
+        );
+
+    }
 
 }
 
@@ -483,91 +988,23 @@ function saveApplications(applications) {
    LOGIN
 ========================================================= */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        const loginScreen =
-            document.getElementById("loginScreen");
-
-        const adminApp =
-            document.getElementById("adminApp");
-
-        const loginForm =
-            document.getElementById("loginForm");
-
-        const logoutButton =
-            document.getElementById("logoutButton");
-
-
-        if (!loginScreen || !adminApp) {
-            return;
-        }
-
-
-        const authenticated =
-            localStorage.getItem(
-                STORAGE_KEYS.AUTH
-            ) === "true";
-
-
-        if (authenticated) {
-
-            showAdmin();
-
-        } else {
-
-            showLogin();
-
-        }
-
-
-        loginForm.addEventListener(
-            "submit",
-            handleLogin
-        );
-
-
-        logoutButton.addEventListener(
-            "click",
-            logout
-        );
-
-
-        setupNavigation();
-
-        setupApplicationControls();
-
-        setupPlayerForm();
-
-        document
-            .getElementById("addPlayerButton")
-            ?.addEventListener(
-                "click",
-                () => openPlayerModal()
-            );
-
-    }
-);
-
-
-/* LOGIN */
-
-function handleLogin(event) {
+function handleLogin(
+    event
+) {
 
     event.preventDefault();
 
 
-    const username =
-        document
-            .getElementById("loginUsername")
-            .value
-            .trim();
+    const usernameInput =
+        document.getElementById(
+            "loginUsername"
+        );
 
-    const password =
-        document
-            .getElementById("loginPassword")
-            .value;
+
+    const passwordInput =
+        document.getElementById(
+            "loginPassword"
+        );
 
 
     const error =
@@ -576,9 +1013,23 @@ function handleLogin(event) {
         );
 
 
+    const username =
+        usernameInput
+            ? usernameInput.value.trim()
+            : "";
+
+
+    const password =
+        passwordInput
+            ? passwordInput.value
+            : "";
+
+
     if (
-        username === ADMIN_USERNAME &&
-        password === ADMIN_PASSWORD
+        username ===
+            ADMIN_USERNAME &&
+        password ===
+            ADMIN_PASSWORD
     ) {
 
         localStorage.setItem(
@@ -586,50 +1037,129 @@ function handleLogin(event) {
             "true"
         );
 
-        error.classList.remove("visible");
+
+        if (error) {
+
+            error.classList.remove(
+                "visible"
+            );
+
+        }
+
 
         showAdmin();
 
     } else {
 
-        error.classList.add("visible");
+        if (error) {
 
-        document
-            .getElementById("loginPassword")
-            .value = "";
+            error.classList.add(
+                "visible"
+            );
+
+        }
+
+
+        if (passwordInput) {
+
+            passwordInput.value =
+                "";
+
+            passwordInput.focus();
+
+        }
 
     }
 
 }
 
 
+/* =========================================================
+   SHOW LOGIN
+========================================================= */
+
 function showLogin() {
 
-    document
-        .getElementById("loginScreen")
-        ?.classList.remove("hidden");
+    const loginScreen =
+        document.getElementById(
+            "loginScreen"
+        );
 
-    document
-        .getElementById("adminApp")
-        ?.classList.remove("visible");
+
+    const adminApp =
+        document.getElementById(
+            "adminApp"
+        );
+
+
+    if (loginScreen) {
+
+        loginScreen.classList.remove(
+            "hidden"
+        );
+
+    }
+
+
+    if (adminApp) {
+
+        adminApp.classList.remove(
+            "visible"
+        );
+
+    }
 
 }
 
 
+/* =========================================================
+   SHOW ADMIN
+========================================================= */
+
 function showAdmin() {
 
-    document
-        .getElementById("loginScreen")
-        ?.classList.add("hidden");
-
-    document
-        .getElementById("adminApp")
-        ?.classList.add("visible");
+    const loginScreen =
+        document.getElementById(
+            "loginScreen"
+        );
 
 
-    document
-        .getElementById("operatorName")
-        .textContent = ADMIN_USERNAME;
+    const adminApp =
+        document.getElementById(
+            "adminApp"
+        );
+
+
+    if (loginScreen) {
+
+        loginScreen.classList.add(
+            "hidden"
+        );
+
+    }
+
+
+    if (adminApp) {
+
+        adminApp.classList.add(
+            "visible"
+        );
+
+    }
+
+
+    const operatorName =
+        document.getElementById(
+            "operatorName"
+        );
+
+
+    if (operatorName) {
+
+        operatorName.textContent =
+            ADMIN_USERNAME;
+
+    }
 
 
     renderEverything();
@@ -637,11 +1167,16 @@ function showAdmin() {
 }
 
 
+/* =========================================================
+   LOGOUT
+========================================================= */
+
 function logout() {
 
     localStorage.removeItem(
         STORAGE_KEYS.AUTH
     );
+
 
     location.reload();
 
@@ -649,13 +1184,15 @@ function logout() {
 
 
 /* =========================================================
-   NAVIGATION
+   ADMIN NAVIGATION
 ========================================================= */
 
 function setupNavigation() {
 
     document
-        .querySelectorAll(".admin-nav")
+        .querySelectorAll(
+            ".admin-nav"
+        )
         .forEach(button => {
 
             button.addEventListener(
@@ -674,43 +1211,67 @@ function setupNavigation() {
 }
 
 
-function openAdminPage(page) {
+function openAdminPage(
+    page
+) {
 
     document
-        .querySelectorAll(".admin-nav")
+        .querySelectorAll(
+            ".admin-nav"
+        )
         .forEach(button => {
 
             button.classList.toggle(
                 "active",
-                button.dataset.page === page
+                button.dataset.page ===
+                    page
             );
 
         });
 
 
     document
-        .querySelectorAll(".admin-page")
+        .querySelectorAll(
+            ".admin-page"
+        )
         .forEach(section => {
 
             section.classList.toggle(
                 "active",
                 section.id ===
-                `page-${page}`
+                    `page-${page}`
             );
 
         });
 
 
-    if (page === "dashboard") {
+    if (
+        page ===
+        "dashboard"
+    ) {
+
         renderDashboard();
+
     }
 
-    if (page === "applications") {
+
+    if (
+        page ===
+        "applications"
+    ) {
+
         renderApplications();
+
     }
 
-    if (page === "roster") {
+
+    if (
+        page ===
+        "roster"
+    ) {
+
         renderRosterEditor();
+
     }
 
 }
@@ -740,6 +1301,7 @@ function renderDashboard() {
     const applications =
         getApplications();
 
+
     const roster =
         getRoster();
 
@@ -747,19 +1309,28 @@ function renderDashboard() {
     const total =
         applications.length;
 
+
     const newCount =
         applications.filter(
-            app => app.status === "NEW"
+            app =>
+                app.status ===
+                "NEW"
         ).length;
+
 
     const accepted =
         applications.filter(
-            app => app.status === "ACCEPTED"
+            app =>
+                app.status ===
+                "ACCEPTED"
         ).length;
+
 
     const rejected =
         applications.filter(
-            app => app.status === "REJECTED"
+            app =>
+                app.status ===
+                "REJECTED"
         ).length;
 
 
@@ -768,20 +1339,24 @@ function renderDashboard() {
         total
     );
 
+
     setText(
         "statNew",
         newCount
     );
+
 
     setText(
         "statAccepted",
         accepted
     );
 
+
     setText(
         "statRejected",
         rejected
     );
+
 
     setText(
         "sidebarNewCount",
@@ -792,6 +1367,7 @@ function renderDashboard() {
     renderRecentApplications(
         applications
     );
+
 
     renderDashboardRoster(
         roster
@@ -813,58 +1389,85 @@ function renderRecentApplications(
             "recentApplications"
         );
 
-    if (!container) return;
+
+    if (!container) {
+        return;
+    }
 
 
     const recent =
         [...applications]
             .reverse()
-            .slice(0, 5);
+            .slice(
+                0,
+                5
+            );
 
 
     if (!recent.length) {
 
-        container.innerHTML =
-            `<div class="empty-state">
+        container.innerHTML = `
+            <div class="empty-state">
                 NO APPLICATIONS
-            </div>`;
+            </div>
+        `;
 
         return;
+
     }
 
 
     container.innerHTML =
-        recent.map(app => `
+        recent
+            .map(
+                app => `
 
-            <div class="mini-application">
+                <div class="mini-application">
 
-                <div class="mini-avatar">
-                    ${getInitials(app.nickname)}
-                </div>
+                    <div class="mini-avatar">
+                        ${getInitials(
+                            app.nickname
+                        )}
+                    </div>
 
-                <div class="mini-player-info">
+                    <div class="mini-player-info">
 
-                    <strong>
-                        ${escapeHtml(app.nickname)}
-                    </strong>
+                        <strong>
+                            ${escapeHtml(
+                                app.nickname
+                            )}
+                        </strong>
 
-                    <span>
-                        LVL ${escapeHtml(app.level)}
-                        •
-                        ${escapeHtml(app.activity)}
+                        <span>
+                            LVL
+                            ${escapeHtml(
+                                app.level
+                            )}
+                            •
+                            ${escapeHtml(
+                                app.activity ||
+                                app.hours ||
+                                "—"
+                            )}
+                        </span>
+
+                    </div>
+
+                    <span
+                        class="status-badge ${escapeHtml(
+                            app.status
+                        )}"
+                    >
+                        ${escapeHtml(
+                            app.status
+                        )}
                     </span>
 
                 </div>
 
-                <span
-                    class="status-badge ${app.status}"
-                >
-                    ${app.status}
-                </span>
-
-            </div>
-
-        `).join("");
+            `
+            )
+            .join("");
 
 }
 
@@ -882,13 +1485,33 @@ function renderDashboardRoster(
             "dashboardRoster"
         );
 
-    if (!container) return;
+
+    if (!container) {
+        return;
+    }
+
+
+    if (!roster.length) {
+
+        container.innerHTML = `
+            <div class="empty-state">
+                YZ ROSTER IS EMPTY
+            </div>
+        `;
+
+        return;
+
+    }
 
 
     container.innerHTML =
         roster
-            .slice(0, 5)
-            .map(player => `
+            .slice(
+                0,
+                5
+            )
+            .map(
+                player => `
 
                 <div class="mini-player">
 
@@ -926,34 +1549,56 @@ function renderDashboardRoster(
 
                 </div>
 
-            `).join("");
+            `
+            )
+            .join("");
 
 }
 
 
 /* =========================================================
-   APPLICATIONS
+   APPLICATION CONTROLS
 ========================================================= */
 
 function setupApplicationControls() {
 
-    document
-        .getElementById("applicationSearch")
-        ?.addEventListener(
+    const search =
+        document.getElementById(
+            "applicationSearch"
+        );
+
+
+    const filter =
+        document.getElementById(
+            "applicationFilter"
+        );
+
+
+    if (search) {
+
+        search.addEventListener(
             "input",
             renderApplications
         );
 
+    }
 
-    document
-        .getElementById("applicationFilter")
-        ?.addEventListener(
+
+    if (filter) {
+
+        filter.addEventListener(
             "change",
             renderApplications
         );
 
+    }
+
 }
 
+
+/* =========================================================
+   APPLICATION LIST
+========================================================= */
 
 function renderApplications() {
 
@@ -962,7 +1607,10 @@ function renderApplications() {
             "applicationList"
         );
 
-    if (!container) return;
+
+    if (!container) {
+        return;
+    }
 
 
     let applications =
@@ -984,7 +1632,8 @@ function renderApplications() {
             .getElementById(
                 "applicationFilter"
             )
-            ?.value || "ALL";
+            ?.value ||
+        "ALL";
 
 
     if (search) {
@@ -992,20 +1641,28 @@ function renderApplications() {
         applications =
             applications.filter(
                 app =>
-                    app.nickname
+                    String(
+                        app.nickname
+                    )
                         .toLowerCase()
-                        .includes(search)
+                        .includes(
+                            search
+                        )
             );
 
     }
 
 
-    if (filter !== "ALL") {
+    if (
+        filter !==
+        "ALL"
+    ) {
 
         applications =
             applications.filter(
                 app =>
-                    app.status === filter
+                    app.status ===
+                    filter
             );
 
     }
@@ -1013,12 +1670,14 @@ function renderApplications() {
 
     if (!applications.length) {
 
-        container.innerHTML =
-            `<div class="empty-state">
+        container.innerHTML = `
+            <div class="empty-state">
                 NO APPLICATIONS FOUND
-            </div>`;
+            </div>
+        `;
 
         return;
+
     }
 
 
@@ -1026,13 +1685,16 @@ function renderApplications() {
         applications
             .slice()
             .reverse()
-            .map(app => `
+            .map(
+                app => `
 
                 <div class="application-row">
 
                     <div class="application-index">
                         ${escapeHtml(
-                            app.id.toUpperCase()
+                            String(
+                                app.id
+                            ).toUpperCase()
                         )}
                     </div>
 
@@ -1047,20 +1709,24 @@ function renderApplications() {
                         <div class="application-meta">
 
                             <span>
-                                LVL ${escapeHtml(
+                                LVL
+                                ${escapeHtml(
                                     app.level
                                 )}
                             </span>
 
                             <span>
                                 ${escapeHtml(
-                                    app.activity
+                                    app.activity ||
+                                    app.hours ||
+                                    "—"
                                 )}
                             </span>
 
                             <span>
                                 ${escapeHtml(
-                                    app.role
+                                    app.role ||
+                                    "COMBATER"
                                 )}
                             </span>
 
@@ -1078,21 +1744,27 @@ function renderApplications() {
 
                         <button
                             class="small-button"
-                            onclick="viewApplication('${app.id}')"
+                            onclick="viewApplication('${escapeJs(
+                                app.id
+                            )}')"
                         >
                             VIEW
                         </button>
 
                         <button
                             class="small-button accept"
-                            onclick="acceptApplication('${app.id}')"
+                            onclick="acceptApplication('${escapeJs(
+                                app.id
+                            )}')"
                         >
                             ACCEPT
                         </button>
 
                         <button
                             class="small-button reject"
-                            onclick="rejectApplication('${app.id}')"
+                            onclick="rejectApplication('${escapeJs(
+                                app.id
+                            )}')"
                         >
                             REJECT
                         </button>
@@ -1101,7 +1773,9 @@ function renderApplications() {
 
                 </div>
 
-            `).join("");
+            `
+            )
+            .join("");
 
 }
 
@@ -1110,32 +1784,45 @@ function renderApplications() {
    VIEW APPLICATION
 ========================================================= */
 
-function viewApplication(id) {
+function viewApplication(
+    id
+) {
 
     const applications =
         getApplications();
 
+
     const app =
         applications.find(
-            item => item.id === id
+            item =>
+                String(
+                    item.id
+                ) ===
+                String(id)
         );
 
 
-    if (!app) return;
+    if (!app) {
+
+        alert(
+            "Заявка не найдена."
+        );
+
+        return;
+
+    }
 
 
-    document
-        .getElementById(
+    const nameElement =
+        document.getElementById(
             "modalApplicationName"
-        )
-        .textContent = app.nickname;
+        );
 
 
-    document
-        .getElementById(
+    const statusElement =
+        document.getElementById(
             "modalApplicationStatus"
-        )
-        .textContent = app.status;
+        );
 
 
     const details =
@@ -1144,97 +1831,247 @@ function viewApplication(id) {
         );
 
 
-    details.innerHTML = `
+    if (nameElement) {
 
-        <div class="detail-item">
-            <span>LEVEL</span>
-            <strong>${escapeHtml(app.level)}</strong>
-        </div>
+        nameElement.textContent =
+            app.nickname;
 
-        <div class="detail-item">
-            <span>ACTIVITY</span>
-            <strong>${escapeHtml(app.activity)}</strong>
-        </div>
-
-        <div class="detail-item">
-            <span>AGE</span>
-            <strong>${escapeHtml(app.age)}</strong>
-        </div>
-
-        <div class="detail-item">
-            <span>ROLE</span>
-            <strong>${escapeHtml(app.role)}</strong>
-        </div>
-
-        <div class="detail-item">
-            <span>RUST EXPERIENCE</span>
-            <strong>${escapeHtml(app.experience)}</strong>
-        </div>
-
-        <div class="detail-item">
-            <span>DISCORD</span>
-            <strong>${escapeHtml(app.discord)}</strong>
-        </div>
-
-        <div class="detail-item">
-            <span>DATE</span>
-            <strong>${escapeHtml(app.createdAt)}</strong>
-        </div>
-
-        <div class="detail-item full">
-            <span>ABOUT PLAYER</span>
-            <p>${escapeHtml(app.about)}</p>
-        </div>
-
-    `;
+    }
 
 
-    document
-        .getElementById(
+    if (statusElement) {
+
+        statusElement.textContent =
+            app.status;
+
+        statusElement.className =
+            "modal-status " +
+            app.status;
+
+    }
+
+
+    if (details) {
+
+        details.innerHTML = `
+
+            <div class="detail-item">
+
+                <span>
+                    LEVEL
+                </span>
+
+                <strong>
+                    ${escapeHtml(
+                        app.level
+                    )}
+                </strong>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span>
+                    ACTIVITY
+                </span>
+
+                <strong>
+                    ${escapeHtml(
+                        app.activity ||
+                        app.hours ||
+                        "—"
+                    )}
+                </strong>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span>
+                    AGE
+                </span>
+
+                <strong>
+                    ${escapeHtml(
+                        app.age ||
+                        "—"
+                    )}
+                </strong>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span>
+                    ROLE
+                </span>
+
+                <strong>
+                    ${escapeHtml(
+                        app.role ||
+                        "COMBATER"
+                    )}
+                </strong>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span>
+                    RUST EXPERIENCE
+                </span>
+
+                <strong>
+                    ${escapeHtml(
+                        app.experience ||
+                        "—"
+                    )}
+                </strong>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span>
+                    DISCORD
+                </span>
+
+                <strong>
+                    ${escapeHtml(
+                        app.discord ||
+                        app.contact ||
+                        "—"
+                    )}
+                </strong>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span>
+                    DATE
+                </span>
+
+                <strong>
+                    ${escapeHtml(
+                        app.createdAt ||
+                        "—"
+                    )}
+                </strong>
+
+            </div>
+
+
+            <div class="detail-item full">
+
+                <span>
+                    ABOUT PLAYER
+                </span>
+
+                <p>
+                    ${escapeHtml(
+                        app.about ||
+                        "—"
+                    )}
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+
+    const reviewButton =
+        document.getElementById(
             "modalReviewButton"
-        )
-        .onclick = () => {
-
-            updateApplicationStatus(
-                id,
-                "REVIEW"
-            );
-
-            closeModal(
-                "applicationModal"
-            );
-
-        };
+        );
 
 
-    document
-        .getElementById(
+    const acceptButton =
+        document.getElementById(
             "modalAcceptButton"
-        )
-        .onclick = () => {
-
-            acceptApplication(id);
-
-            closeModal(
-                "applicationModal"
-            );
-
-        };
+        );
 
 
-    document
-        .getElementById(
+    const rejectButton =
+        document.getElementById(
             "modalRejectButton"
-        )
-        .onclick = () => {
+        );
 
-            rejectApplication(id);
 
-            closeModal(
-                "applicationModal"
-            );
+    if (reviewButton) {
 
-        };
+        reviewButton.onclick =
+            () => {
+
+                updateApplicationStatus(
+                    id,
+                    "REVIEW"
+                );
+
+
+                closeModal(
+                    "applicationModal"
+                );
+
+            };
+
+    }
+
+
+    if (acceptButton) {
+
+        acceptButton.onclick =
+            () => {
+
+                const accepted =
+                    acceptApplication(
+                        id
+                    );
+
+
+                if (accepted) {
+
+                    closeModal(
+                        "applicationModal"
+                    );
+
+                }
+
+            };
+
+    }
+
+
+    if (rejectButton) {
+
+        rejectButton.onclick =
+            () => {
+
+                const rejected =
+                    rejectApplication(
+                        id
+                    );
+
+
+                if (rejected) {
+
+                    closeModal(
+                        "applicationModal"
+                    );
+
+                }
+
+            };
+
+    }
 
 
     openModal(
@@ -1248,18 +2085,29 @@ function viewApplication(id) {
    ACCEPT APPLICATION
 ========================================================= */
 
-function acceptApplication(id) {
+function acceptApplication(
+    id
+) {
 
     const applications =
         getApplications();
 
+
     const index =
         applications.findIndex(
-            app => app.id === id
+            app =>
+                String(
+                    app.id
+                ) ===
+                String(id)
         );
 
 
-    if (index === -1) return;
+    if (index === -1) {
+
+        return false;
+
+    }
 
 
     const app =
@@ -1271,9 +2119,15 @@ function acceptApplication(id) {
             `Принять ${app.nickname} в YZ?`
         )
     ) {
-        return;
+
+        return false;
+
     }
 
+
+    /*
+       UPDATE APPLICATION
+    */
 
     applications[index].status =
         "ACCEPTED";
@@ -1284,7 +2138,9 @@ function acceptApplication(id) {
     );
 
 
-    /* Automatically add to roster */
+    /*
+       ADD TO ROSTER
+    */
 
     const roster =
         getRoster();
@@ -1293,8 +2149,14 @@ function acceptApplication(id) {
     const alreadyExists =
         roster.some(
             player =>
-                player.nickname.toLowerCase() ===
-                app.nickname.toLowerCase()
+                String(
+                    player.nickname
+                )
+                    .toLowerCase() ===
+                String(
+                    app.nickname
+                )
+                    .toLowerCase()
         );
 
 
@@ -1313,13 +2175,19 @@ function acceptApplication(id) {
                 "MEMBER",
 
             role:
-                app.role || "COMBATER",
+                app.role ||
+                "COMBATER",
 
             level:
-                app.level || "65+",
+                String(
+                    app.level ||
+                    "65+"
+                ),
 
             activity:
-                app.activity || "6–8 H/DAY",
+                app.activity ||
+                app.hours ||
+                "6–8 H/DAY",
 
             status:
                 "ACTIVE",
@@ -1331,7 +2199,9 @@ function acceptApplication(id) {
         });
 
 
-        saveRoster(roster);
+        saveRoster(
+            roster
+        );
 
     }
 
@@ -1343,25 +2213,39 @@ function acceptApplication(id) {
         `${app.nickname} принят в YZ.`
     );
 
+
+    return true;
+
 }
 
 
 /* =========================================================
-   REJECT
+   REJECT APPLICATION
 ========================================================= */
 
-function rejectApplication(id) {
+function rejectApplication(
+    id
+) {
 
     const applications =
         getApplications();
 
+
     const index =
         applications.findIndex(
-            app => app.id === id
+            app =>
+                String(
+                    app.id
+                ) ===
+                String(id)
         );
 
 
-    if (index === -1) return;
+    if (index === -1) {
+
+        return false;
+
+    }
 
 
     const app =
@@ -1373,7 +2257,9 @@ function rejectApplication(id) {
             `Отклонить заявку ${app.nickname}?`
         )
     ) {
-        return;
+
+        return false;
+
     }
 
 
@@ -1393,11 +2279,14 @@ function rejectApplication(id) {
         `Заявка ${app.nickname} отклонена.`
     );
 
+
+    return true;
+
 }
 
 
 /* =========================================================
-   STATUS
+   UPDATE APPLICATION STATUS
 ========================================================= */
 
 function updateApplicationStatus(
@@ -1411,14 +2300,21 @@ function updateApplicationStatus(
 
     const app =
         applications.find(
-            item => item.id === id
+            item =>
+                String(
+                    item.id
+                ) ===
+                String(id)
         );
 
 
-    if (!app) return;
+    if (!app) {
+        return;
+    }
 
 
-    app.status = status;
+    app.status =
+        status;
 
 
     saveApplications(
@@ -1442,7 +2338,10 @@ function renderRosterEditor() {
             "rosterEditor"
         );
 
-    if (!container) return;
+
+    if (!container) {
+        return;
+    }
 
 
     const roster =
@@ -1451,54 +2350,77 @@ function renderRosterEditor() {
 
     if (!roster.length) {
 
-        container.innerHTML =
-            `<div class="empty-state">
+        container.innerHTML = `
+            <div class="empty-state">
                 YZ ROSTER IS EMPTY
-            </div>`;
+            </div>
+        `;
 
         return;
+
     }
 
 
     container.innerHTML =
-        roster.map(
-            (player, index) => `
+        roster
+            .map(
+                (player, index) => `
 
                 <div
                     class="roster-editor-card"
                 >
 
                     <div class="roster-editor-number">
-                        YZ // ${String(index + 1)
-                            .padStart(3, "0")}
+
+                        YZ //
+                        ${String(
+                            index + 1
+                        ).padStart(
+                            3,
+                            "0"
+                        )}
+
                     </div>
 
+
                     <div class="roster-editor-avatar">
+
                         ${getInitials(
                             player.nickname
                         )}
+
                     </div>
 
+
                     <h3>
+
                         ${escapeHtml(
                             player.nickname
                         )}
+
                     </h3>
 
+
                     <div class="roster-editor-rank">
+
                         ${escapeHtml(
                             player.rank
                         )}
+
                         /
+
                         ${escapeHtml(
                             player.role
                         )}
+
                     </div>
+
 
                     <div class="roster-editor-stats">
 
                         <span>
-                            LVL ${escapeHtml(
+                            LVL
+                            ${escapeHtml(
                                 player.level
                             )}
                         </span>
@@ -1517,18 +2439,24 @@ function renderRosterEditor() {
 
                     </div>
 
+
                     <div class="roster-editor-actions">
 
                         <button
                             class="small-button"
-                            onclick="editPlayer('${player.id}')"
+                            onclick="editPlayer('${escapeJs(
+                                player.id
+                            )}')"
                         >
                             EDIT
                         </button>
 
+
                         <button
                             class="small-button reject"
-                            onclick="deletePlayer('${player.id}')"
+                            onclick="deletePlayer('${escapeJs(
+                                player.id
+                            )}')"
                         >
                             DELETE
                         </button>
@@ -1538,24 +2466,34 @@ function renderRosterEditor() {
                 </div>
 
             `
-        ).join("");
+            )
+            .join("");
 
 }
 
 
 /* =========================================================
-   ADD / EDIT PLAYER
+   PLAYER MODAL
 ========================================================= */
 
 function openPlayerModal(
     player = null
 ) {
 
-    document
-        .getElementById(
+    const modal =
+        document.getElementById(
             "playerModal"
-        )
-        .classList.add("open");
+        );
+
+
+    if (!modal) {
+        return;
+    }
+
+
+    modal.classList.add(
+        "open"
+    );
 
 
     const title =
@@ -1566,68 +2504,102 @@ function openPlayerModal(
 
     if (player) {
 
-        title.textContent =
-            "EDIT PLAYER";
+        if (title) {
+
+            title.textContent =
+                "EDIT PLAYER";
+
+        }
 
 
-        document
-            .getElementById("playerId")
-            .value = player.id;
+        setInputValue(
+            "playerId",
+            player.id
+        );
 
-        document
-            .getElementById("playerNickname")
-            .value = player.nickname;
 
-        document
-            .getElementById("playerRank")
-            .value = player.rank;
+        setInputValue(
+            "playerNickname",
+            player.nickname
+        );
 
-        document
-            .getElementById("playerRole")
-            .value = player.role;
 
-        document
-            .getElementById("playerLevel")
-            .value = player.level;
+        setInputValue(
+            "playerRank",
+            player.rank
+        );
 
-        document
-            .getElementById("playerActivity")
-            .value = player.activity;
 
-        document
-            .getElementById("playerStatus")
-            .value = player.status;
+        setInputValue(
+            "playerRole",
+            player.role
+        );
 
-        document
-            .getElementById("playerDescription")
-            .value =
-                player.description || "";
+
+        setInputValue(
+            "playerLevel",
+            player.level
+        );
+
+
+        setInputValue(
+            "playerActivity",
+            player.activity
+        );
+
+
+        setInputValue(
+            "playerStatus",
+            player.status
+        );
+
+
+        setInputValue(
+            "playerDescription",
+            player.description ||
+            ""
+        );
 
     } else {
 
-        title.textContent =
-            "ADD PLAYER";
+        if (title) {
+
+            title.textContent =
+                "ADD PLAYER";
+
+        }
 
 
-        document
-            .getElementById(
+        const form =
+            document.getElementById(
                 "playerForm"
-            )
-            .reset();
+            );
 
 
-        document
-            .getElementById(
-                "playerId"
-            )
-            .value = "";
+        if (form) {
+
+            form.reset();
+
+        }
+
+
+        setInputValue(
+            "playerId",
+            ""
+        );
 
     }
 
 }
 
 
-function editPlayer(id) {
+/* =========================================================
+   EDIT PLAYER
+========================================================= */
+
+function editPlayer(
+    id
+) {
 
     const roster =
         getRoster();
@@ -1635,11 +2607,23 @@ function editPlayer(id) {
 
     const player =
         roster.find(
-            item => item.id === id
+            item =>
+                String(
+                    item.id
+                ) ===
+                String(id)
         );
 
 
-    if (!player) return;
+    if (!player) {
+
+        alert(
+            "Игрок не найден."
+        );
+
+        return;
+
+    }
 
 
     openPlayerModal(
@@ -1650,24 +2634,37 @@ function editPlayer(id) {
 
 
 /* =========================================================
-   SAVE PLAYER
+   PLAYER FORM
 ========================================================= */
 
 function setupPlayerForm() {
 
-    document
-        .getElementById(
+    const form =
+        document.getElementById(
             "playerForm"
-        )
-        ?.addEventListener(
-            "submit",
-            savePlayer
         );
+
+
+    if (!form) {
+        return;
+    }
+
+
+    form.addEventListener(
+        "submit",
+        savePlayer
+    );
 
 }
 
 
-function savePlayer(event) {
+/* =========================================================
+   SAVE PLAYER
+========================================================= */
+
+function savePlayer(
+    event
+) {
 
     event.preventDefault();
 
@@ -1677,73 +2674,65 @@ function savePlayer(event) {
 
 
     const id =
-        document
-            .getElementById(
-                "playerId"
-            )
-            .value;
+        getInputValue(
+            "playerId"
+        );
 
 
     const player = {
 
         id:
             id ||
-            "yz-" + Date.now(),
+            "yz-" +
+            Date.now(),
 
         nickname:
-            document
-                .getElementById(
-                    "playerNickname"
-                )
-                .value
-                .trim(),
+            getInputValue(
+                "playerNickname"
+            ),
 
         rank:
-            document
-                .getElementById(
-                    "playerRank"
-                )
-                .value,
+            getInputValue(
+                "playerRank"
+            ),
 
         role:
-            document
-                .getElementById(
-                    "playerRole"
-                )
-                .value,
+            getInputValue(
+                "playerRole"
+            ),
 
         level:
-            document
-                .getElementById(
-                    "playerLevel"
-                )
-                .value
-                .trim(),
+            getInputValue(
+                "playerLevel"
+            ),
 
         activity:
-            document
-                .getElementById(
-                    "playerActivity"
-                )
-                .value
-                .trim(),
+            getInputValue(
+                "playerActivity"
+            ),
 
         status:
-            document
-                .getElementById(
-                    "playerStatus"
-                )
-                .value,
+            getInputValue(
+                "playerStatus"
+            ),
 
         description:
-            document
-                .getElementById(
-                    "playerDescription"
-                )
-                .value
-                .trim()
+            getInputValue(
+                "playerDescription"
+            )
 
     };
+
+
+    if (!player.nickname) {
+
+        alert(
+            "Введите ник игрока."
+        );
+
+        return;
+
+    }
 
 
     if (id) {
@@ -1751,7 +2740,10 @@ function savePlayer(event) {
         const index =
             roster.findIndex(
                 item =>
-                    item.id === id
+                    String(
+                        item.id
+                    ) ===
+                    String(id)
             );
 
 
@@ -1795,7 +2787,9 @@ function savePlayer(event) {
    DELETE PLAYER
 ========================================================= */
 
-function deletePlayer(id) {
+function deletePlayer(
+    id
+) {
 
     const roster =
         getRoster();
@@ -1803,25 +2797,43 @@ function deletePlayer(id) {
 
     const player =
         roster.find(
-            item => item.id === id
+            item =>
+                String(
+                    item.id
+                ) ===
+                String(id)
         );
 
 
-    if (!player) return;
+    if (!player) {
 
+        return;
+
+    }
+
+
+    /*
+       Защита от случайного удаления
+    */
 
     if (
         !confirm(
             `Удалить ${player.nickname} из состава YZ?`
         )
     ) {
+
         return;
+
     }
 
 
     const updated =
         roster.filter(
-            item => item.id !== id
+            item =>
+                String(
+                    item.id
+                ) !==
+                String(id)
         );
 
 
@@ -1844,25 +2856,51 @@ function deletePlayer(id) {
    MODALS
 ========================================================= */
 
-function openModal(id) {
+function openModal(
+    id
+) {
 
-    document
-        .getElementById(id)
-        ?.classList.add("open");
+    const modal =
+        document.getElementById(
+            id
+        );
+
+
+    if (modal) {
+
+        modal.classList.add(
+            "open"
+        );
+
+    }
 
 }
 
 
-function closeModal(id) {
+function closeModal(
+    id
+) {
 
-    document
-        .getElementById(id)
-        ?.classList.remove("open");
+    const modal =
+        document.getElementById(
+            id
+        );
+
+
+    if (modal) {
+
+        modal.classList.remove(
+            "open"
+        );
+
+    }
 
 }
 
 
-/* Close modal by clicking background */
+/* =========================================================
+   CLICK OUTSIDE MODAL
+========================================================= */
 
 document.addEventListener(
     "click",
@@ -1885,8 +2923,85 @@ document.addEventListener(
 
 
 /* =========================================================
+   ESC CLOSE MODAL
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key !==
+            "Escape"
+        ) {
+
+            return;
+
+        }
+
+
+        document
+            .querySelectorAll(
+                ".modal-overlay.open"
+            )
+            .forEach(
+                modal => {
+
+                    modal.classList.remove(
+                        "open"
+                    );
+
+                }
+            );
+
+    }
+);
+
+
+/* =========================================================
    HELPERS
 ========================================================= */
+
+function getInputValue(
+    id
+) {
+
+    const element =
+        document.getElementById(
+            id
+        );
+
+
+    if (!element) {
+        return "";
+    }
+
+
+    return element.value.trim();
+
+}
+
+
+function setInputValue(
+    id,
+    value
+) {
+
+    const element =
+        document.getElementById(
+            id
+        );
+
+
+    if (element) {
+
+        element.value =
+            value ?? "";
+
+    }
+
+}
+
 
 function setText(
     id,
@@ -1894,7 +3009,10 @@ function setText(
 ) {
 
     const element =
-        document.getElementById(id);
+        document.getElementById(
+            id
+        );
+
 
     if (element) {
 
@@ -1906,27 +3024,52 @@ function setText(
 }
 
 
+/* =========================================================
+   INITIALS
+========================================================= */
+
 function getInitials(
     nickname
 ) {
 
     if (!nickname) {
+
         return "YZ";
+
     }
 
 
     const clean =
-        nickname
+        String(
+            nickname
+        )
             .trim()
-            .replace(/[^a-zA-Zа-яА-Я0-9]/g, "");
+            .replace(
+                /[^a-zA-Zа-яА-Я0-9]/g,
+                ""
+            );
+
+
+    if (!clean) {
+
+        return "YZ";
+
+    }
 
 
     return clean
-        .slice(0, 2)
+        .slice(
+            0,
+            2
+        )
         .toUpperCase();
 
 }
 
+
+/* =========================================================
+   HTML SECURITY
+========================================================= */
 
 function escapeHtml(
     value
@@ -1936,15 +3079,75 @@ function escapeHtml(
         value === null ||
         value === undefined
     ) {
+
         return "";
+
     }
 
 
-    return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+    return String(
+        value
+    )
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+
+}
+
+
+/* =========================================================
+   JAVASCRIPT STRING SECURITY
+========================================================= */
+
+function escapeJs(
+    value
+) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+
+        return "";
+
+    }
+
+
+    return String(
+        value
+    )
+        .replaceAll(
+            "\\",
+            "\\\\"
+        )
+        .replaceAll(
+            "'",
+            "\\'"
+        )
+        .replaceAll(
+            "\n",
+            "\\n"
+        )
+        .replaceAll(
+            "\r",
+            "\\r"
+        );
 
 }
