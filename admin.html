@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>YZ // ADMIN PANEL</title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Oswald:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .admin-page {
+            min-height: 100vh;
+            padding: 130px 0 80px;
+        }
+
+        .admin-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .admin-title {
+            font-family: "Oswald", sans-serif;
+            font-size: clamp(55px, 9vw, 100px);
+            line-height: .85;
+        }
+
+        .admin-title span {
+            color: var(--accent);
+        }
+
+        .admin-subtitle {
+            margin-top: 15px;
+            color: #666;
+            font-size: 11px;
+            letter-spacing: 2px;
+        }
+
+        .admin-user {
+            padding: 15px 20px;
+            border: 1px solid var(--border);
+            text-align: right;
+        }
+
+        .admin-user span {
+            display: block;
+            color: #555;
+            font-size: 8px;
+            letter-spacing: 2px;
+        }
+
+        .admin-user strong {
+            display: block;
+            margin-top: 5px;
+            color: var(--accent);
+            font-size: 13px;
+        }
+
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2px;
+            margin-bottom: 50px;
+            background: var(--border);
+        }
+
+        .admin-stat {
+            padding: 25px;
+            background: #111;
+        }
+
+        .admin-stat strong {
+            display: block;
+            font-family: "Oswald", sans-serif;
+            font-size: 40px;
+        }
+
+        .admin-stat span {
+            color: #555;
+            font-size: 8px;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .applications {
+            border-top: 1px solid var(--border);
+        }
+
+        .application {
+            display: grid;
+            grid-template-columns: 70px 1fr auto;
+            align-items: center;
+            gap: 25px;
+            padding: 25px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .application-number {
+            color: var(--accent);
+            font-size: 10px;
+            font-weight: 900;
+        }
+
+        .application-name {
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        .application-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .application-info span {
+            padding: 5px 8px;
+            border: 1px solid #292929;
+            color: #666;
+            font-size: 8px;
+            letter-spacing: 1px;
+        }
+
+        .application-actions {
+            display: flex;
+            gap: 7px;
+        }
+
+        .admin-button {
+            padding: 11px 14px;
+            border: 1px solid #292929;
+            background: transparent;
+            color: #999;
+            font-size: 8px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            transition: .2s;
+        }
+
+        .admin-button:hover {
+            border-color: var(--accent);
+            color: white;
+        }
+
+        .admin-button.accept:hover {
+            background: #23733d;
+            border-color: #23733d;
+        }
+
+        .admin-button.reject:hover {
+            background: #8d2929;
+            border-color: #8d2929;
+        }
+
+        .empty-applications {
+            padding: 70px 20px;
+            text-align: center;
+            color: #555;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .back-home {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 14px 20px;
+            border: 1px solid #292929;
+            color: #777;
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: 2px;
+        }
+
+        @media (max-width: 700px) {
+
+            .admin-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .admin-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .application {
+                grid-template-columns: 40px 1fr;
+            }
+
+            .application-actions {
+                grid-column: 2;
+            }
+
+            .admin-button {
+                flex: 1;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="noise"></div>
+<div class="bg-grid"></div>
+
+
+<header class="header">
+
+    <div class="container nav">
+
+        <a href="index.html" class="logo">
+
+            <span class="logo-mark">
+                YZ
+            </span>
+
+            <span class="logo-text">
+                ADMIN
+            </span>
+
+        </a>
+
+        <a href="index.html" class="nav-button">
+            EXIT PANEL
+        </a>
+
+    </div>
+
+</header>
+
+
+<main class="admin-page">
+
+    <div class="container">
+
+        <div class="admin-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    YZ INTEL / COMMAND CENTER
+                </p>
+
+                <h1 class="admin-title">
+                    ADMIN<br>
+                    <span>PANEL</span>
+                </h1>
+
+                <p class="admin-subtitle">
+                    APPLICATION REVIEW SYSTEM
+                </p>
+
+            </div>
+
+
+            <div class="admin-user">
+
+                <span>
+                    AUTHORIZED COMMAND
+                </span>
+
+                <strong>
+                    AkashiSK8
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- STATS -->
+
+        <div class="admin-stats">
+
+            <div class="admin-stat">
+                <strong id="totalApplications">
+                    12
+                </strong>
+
+                <span>
+                    TOTAL
+                </span>
+            </div>
+
+            <div class="admin-stat">
+                <strong id="newApplications">
+                    4
+                </strong>
+
+                <span>
+                    NEW
+                </span>
+            </div>
+
+            <div class="admin-stat">
+                <strong id="acceptedApplications">
+                    6
+                </strong>
+
+                <span>
+                    ACCEPTED
+                </span>
+            </div>
+
+            <div class="admin-stat">
+                <strong id="rejectedApplications">
+                    2
+                </strong>
+
+                <span>
+                    REJECTED
+                </span>
+            </div>
+
+        </div>
+
+
+        <!-- APPLICATIONS -->
+
+        <div class="applications" id="applications">
+
+            <div class="application">
+
+                <div class="application-number">
+                    #001
+                </div>
+
+                <div>
+
+                    <div class="application-name">
+                        ExamplePlayer
+                    </div>
+
+                    <div class="application-info">
+
+                        <span>
+                            LVL 72
+                        </span>
+
+                        <span>
+                            8H/DAY
+                        </span>
+
+                        <span>
+                            EXPERIENCED
+                        </span>
+
+                        <span>
+                            NEW
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="application-actions">
+
+                    <button
+                        class="admin-button accept"
+                        onclick="acceptApplication(this)"
+                    >
+                        ACCEPT
+                    </button>
+
+                    <button
+                        class="admin-button reject"
+                        onclick="rejectApplication(this)"
+                    >
+                        REJECT
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="application">
+
+                <div class="application-number">
+                    #002
+                </div>
+
+                <div>
+
+                    <div class="application-name">
+                        RustPlayer
+                    </div>
+
+                    <div class="application-info">
+
+                        <span>
+                            LVL 68
+                        </span>
+
+                        <span>
+                            6–8H/DAY
+                        </span>
+
+                        <span>
+                            PVP
+                        </span>
+
+                        <span>
+                            NEW
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="application-actions">
+
+                    <button
+                        class="admin-button accept"
+                        onclick="acceptApplication(this)"
+                    >
+                        ACCEPT
+                    </button>
+
+                    <button
+                        class="admin-button reject"
+                        onclick="rejectApplication(this)"
+                    >
+                        REJECT
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="application">
+
+                <div class="application-number">
+                    #003
+                </div>
+
+                <div>
+
+                    <div class="application-name">
+                        RaiderX
+                    </div>
+
+                    <div class="application-info">
+
+                        <span>
+                            LVL 81
+                        </span>
+
+                        <span>
+                            10H/DAY
+                        </span>
+
+                        <span>
+                            RAIDER
+                        </span>
+
+                        <span>
+                            NEW
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="application-actions">
+
+                    <button
+                        class="admin-button accept"
+                        onclick="acceptApplication(this)"
+                    >
+                        ACCEPT
+                    </button>
+
+                    <button
+                        class="admin-button reject"
+                        onclick="rejectApplication(this)"
+                    >
+                        REJECT
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <a href="index.html" class="back-home">
+            ← BACK TO YZ
+        </a>
+
+    </div>
+
+</main>
+
+
+<script>
+
+function acceptApplication(button) {
+
+    const application =
+        button.closest(".application");
+
+    const name =
+        application.querySelector(
+            ".application-name"
+        ).textContent.trim();
+
+    application.style.opacity = "0.4";
+
+    button.textContent = "ACCEPTED";
+
+    button.disabled = true;
+
+    alert(
+        name +
+        " принят в состав YZ."
+    );
+
+}
+
+
+function rejectApplication(button) {
+
+    const application =
+        button.closest(".application");
+
+    const name =
+        application.querySelector(
+            ".application-name"
+        ).textContent.trim();
+
+    application.style.opacity = "0.35";
+
+    button.textContent = "REJECTED";
+
+    button.disabled = true;
+
+    alert(
+        "Заявка " +
+        name +
+        " отклонена."
+    );
+
+}
+
+</script>
+
+
+</body>
+
+</html>
