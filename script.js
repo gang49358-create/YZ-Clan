@@ -2069,13 +2069,13 @@ function acceptApplication(
             level:
                 String(
                     app.level ||
-                    "65+"
+                    "—"
                 ),
 
             activity:
                 app.activity ||
                 app.hours ||
-                "6–8 H/DAY",
+                "ACTIVE",
 
             status:
                 "ACTIVE",
