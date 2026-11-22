@@ -1810,7 +1810,7 @@ function viewApplication(
             <div class="detail-item">
 
                 <span>
-                    RUST EXPERIENCE
+                    PUBG MOBILE EXPERIENCE
                 </span>
 
                 <strong>
