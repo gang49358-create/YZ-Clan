@@ -9,13 +9,13 @@
    ADMIN CONFIG
 ========================================================= */
 
-const ADMIN_USERNAME = "AkashiSK8";
+const ADMIN_USERNAME = "Arkasha";
 const ADMIN_PASSWORD = "YZ_Admin_2026";
 
 const STORAGE_KEYS = {
-    AUTH: "yz_admin_auth",
-    APPLICATIONS: "yz_applications",
-    ROSTER: "yz_roster"
+    AUTH: "no_mercy_admin_auth_v2",
+    APPLICATIONS: "no_mercy_applications_v2",
+    ROSTER: "no_mercy_roster_v2"
 };
 
 
@@ -24,55 +24,8 @@ const STORAGE_KEYS = {
 ========================================================= */
 
 const DEFAULT_ROSTER = [
-
-    {
-        id: "yz001",
-        nickname: "AkashiSK8",
-        rank: "LEADER",
-        role: "COMMANDER",
-        level: "65+",
-        activity: "8–10 H/DAY",
-        status: "ACTIVE",
-        description:
-            "Основатель и лидер YZ. Стратегия, организация состава и командование."
-    },
-
-    {
-        id: "yz002",
-        nickname: "Agent",
-        rank: "DEPUTY",
-        role: "COMMANDER",
-        level: "65+",
-        activity: "8+ H/DAY",
-        status: "ACTIVE",
-        description:
-            "Заместитель лидера. Координация состава и поддержка командования."
-    },
-
-    {
-        id: "yz003",
-        nickname: "Byak",
-        rank: "VETERAN",
-        role: "COMBATER",
-        level: "65+",
-        activity: "8+ H/DAY",
-        status: "ACTIVE",
-        description:
-            "Боевой игрок основного состава. PvP, рейды и боевые операции."
-    },
-
-    {
-        id: "yz004",
-        nickname: "Chad",
-        rank: "VETERAN",
-        role: "COMBATER",
-        level: "65+",
-        activity: "8+ H/DAY",
-        status: "ACTIVE",
-        description:
-            "Штурмовой игрок. PvP, рейды и поддержка команды."
-    }
-
+    { id:"yz001", nickname:"Аркаша", rank:"LEADER", role:"COMMANDER", level:"—", activity:"ACTIVE", status:"ACTIVE", description:"Лидер клана NO MERCY [YZ]. Организация состава и командная стратегия." },
+    { id:"yz002", nickname:"KHYAZ", rank:"MAIN DEPUTY", role:"COMMANDER", level:"—", activity:"ACTIVE", status:"ACTIVE", description:"Главный заместитель лидера. Координация игроков и помощь в организации команды." }
 ];
 
 
@@ -80,57 +33,7 @@ const DEFAULT_ROSTER = [
    DEFAULT APPLICATIONS
 ========================================================= */
 
-const DEFAULT_APPLICATIONS = [
-
-    {
-        id: "app001",
-        nickname: "ShadowX",
-        level: "74",
-        activity: "8–10 H/DAY",
-        age: "19",
-        role: "COMBATER",
-        experience: "2 года",
-        discord: "ShadowX",
-        about:
-            "Активный PvP игрок. Ищу серьёзный активный клан.",
-        status: "NEW",
-        createdAt:
-            new Date().toLocaleDateString("ru-RU")
-    },
-
-    {
-        id: "app002",
-        nickname: "Raider77",
-        level: "69",
-        activity: "7–9 H/DAY",
-        age: "21",
-        role: "RAIDER",
-        experience: "1.5 года",
-        discord: "Raider77",
-        about:
-            "Люблю рейды и командную игру. Готов играть каждый день.",
-        status: "REVIEW",
-        createdAt:
-            new Date().toLocaleDateString("ru-RU")
-    },
-
-    {
-        id: "app003",
-        nickname: "Wolf",
-        level: "66",
-        activity: "6–8 H/DAY",
-        age: "18",
-        role: "SCOUT",
-        experience: "1 год",
-        discord: "Wolf",
-        about:
-            "Адекватный активный игрок.",
-        status: "NEW",
-        createdAt:
-            new Date().toLocaleDateString("ru-RU")
-    }
-
-];
+const DEFAULT_APPLICATIONS = [];
 
 
 /* =========================================================
@@ -368,21 +271,6 @@ function initJoinForm() {
                 Number(
                     levelInput?.value || 0
                 );
-
-
-            /*
-               MINIMUM LEVEL
-            */
-
-            if (level < 65) {
-
-                alert(
-                    "Для вступления в YZ необходим 65+ уровень."
-                );
-
-                return;
-
-            }
 
 
             /*
@@ -2116,7 +2004,7 @@ function acceptApplication(
 
     if (
         !confirm(
-            `Принять ${app.nickname} в YZ?`
+            `Принять ${app.nickname} в NO MERCY?`
         )
     ) {
 
@@ -2210,7 +2098,7 @@ function acceptApplication(
 
 
     alert(
-        `${app.nickname} принят в YZ.`
+        `${app.nickname} принят в NO MERCY.`
     );
 
 
@@ -2818,7 +2706,7 @@ function deletePlayer(
 
     if (
         !confirm(
-            `Удалить ${player.nickname} из состава YZ?`
+            `Удалить ${player.nickname} из состава NO MERCY?`
         )
     ) {
 
@@ -2846,7 +2734,7 @@ function deletePlayer(
 
 
     alert(
-        `${player.nickname} удалён из состава.`
+        `${player.nickname} удалён из состава NO MERCY.`
     );
 
 }
